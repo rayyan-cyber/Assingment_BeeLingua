@@ -1,0 +1,226 @@
+{
+  "format": 1,
+  "restore": {
+    "Z:\\Ecomindo\\BeeLingua\\Assingment_BeeLingua.API\\Assingment_BeeLingua.BLL.Test\\Assingment_BeeLingua.BLL.Test.csproj": {}
+  },
+  "projects": {
+    "Z:\\Ecomindo\\BeeLingua\\Assingment_BeeLingua.API\\Assingment_BeeLingua.BLL.Test\\Assingment_BeeLingua.BLL.Test.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "Z:\\Ecomindo\\BeeLingua\\Assingment_BeeLingua.API\\Assingment_BeeLingua.BLL.Test\\Assingment_BeeLingua.BLL.Test.csproj",
+        "projectName": "Assingment_BeeLingua.BLL.Test",
+        "projectPath": "Z:\\Ecomindo\\BeeLingua\\Assingment_BeeLingua.API\\Assingment_BeeLingua.BLL.Test\\Assingment_BeeLingua.BLL.Test.csproj",
+        "packagesPath": "C:\\Users\\Rodhi\\.nuget\\packages\\",
+        "outputPath": "Z:\\Ecomindo\\BeeLingua\\Assingment_BeeLingua.API\\Assingment_BeeLingua.BLL.Test\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Rodhi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://ecomindo.pkgs.visualstudio.com/Nexus/_packaging/Nexus.Base/nuget/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
+            "projectReferences": {
+              "Z:\\Ecomindo\\BeeLingua\\Assingment_BeeLingua.API\\Assingment_BeeLingua.BLL\\Assingment_BeeLingua.BLL.csproj": {
+                "projectPath": "Z:\\Ecomindo\\BeeLingua\\Assingment_BeeLingua.API\\Assingment_BeeLingua.BLL\\Assingment_BeeLingua.BLL.csproj"
+              },
+              "Z:\\Ecomindo\\BeeLingua\\Assingment_BeeLingua.API\\Assingment_BeeLingua.DAL\\Assingment_BeeLingua.DAL.csproj": {
+                "projectPath": "Z:\\Ecomindo\\BeeLingua\\Assingment_BeeLingua.API\\Assingment_BeeLingua.DAL\\Assingment_BeeLingua.DAL.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
+          "dependencies": {
+            "DocumentFormat.OpenXml": {
+              "target": "Package",
+              "version": "[2.12.3, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[16.5.0, )"
+            },
+            "Moq": {
+              "target": "Package",
+              "version": "[4.16.1, )"
+            },
+            "coverlet.collector": {
+              "target": "Package",
+              "version": "[1.2.0, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.4.0, )"
+            },
+            "xunit.runner.visualstudio": {
+              "target": "Package",
+              "version": "[2.4.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "Z:\\Ecomindo\\BeeLingua\\Assingment_BeeLingua.API\\Assingment_BeeLingua.BLL\\Assingment_BeeLingua.BLL.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "Z:\\Ecomindo\\BeeLingua\\Assingment_BeeLingua.API\\Assingment_BeeLingua.BLL\\Assingment_BeeLingua.BLL.csproj",
+        "projectName": "Assingment_BeeLingua.BLL",
+        "projectPath": "Z:\\Ecomindo\\BeeLingua\\Assingment_BeeLingua.API\\Assingment_BeeLingua.BLL\\Assingment_BeeLingua.BLL.csproj",
+        "packagesPath": "C:\\Users\\Rodhi\\.nuget\\packages\\",
+        "outputPath": "Z:\\Ecomindo\\BeeLingua\\Assingment_BeeLingua.API\\Assingment_BeeLingua.BLL\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Rodhi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://ecomindo.pkgs.visualstudio.com/Nexus/_packaging/Nexus.Base/nuget/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
+            "projectReferences": {
+              "Z:\\Ecomindo\\BeeLingua\\Assingment_BeeLingua.API\\Assingment_BeeLingua.DAL\\Assingment_BeeLingua.DAL.csproj": {
+                "projectPath": "Z:\\Ecomindo\\BeeLingua\\Assingment_BeeLingua.API\\Assingment_BeeLingua.DAL\\Assingment_BeeLingua.DAL.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
+          "dependencies": {
+            "Microsoft.AspNetCore.Mvc.Abstractions": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Mvc.Core": {
+              "target": "Package",
+              "version": "[2.2.5, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "Z:\\Ecomindo\\BeeLingua\\Assingment_BeeLingua.API\\Assingment_BeeLingua.DAL\\Assingment_BeeLingua.DAL.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "Z:\\Ecomindo\\BeeLingua\\Assingment_BeeLingua.API\\Assingment_BeeLingua.DAL\\Assingment_BeeLingua.DAL.csproj",
+        "projectName": "Assingment_BeeLingua.DAL",
+        "projectPath": "Z:\\Ecomindo\\BeeLingua\\Assingment_BeeLingua.API\\Assingment_BeeLingua.DAL\\Assingment_BeeLingua.DAL.csproj",
+        "packagesPath": "C:\\Users\\Rodhi\\.nuget\\packages\\",
+        "outputPath": "Z:\\Ecomindo\\BeeLingua\\Assingment_BeeLingua.API\\Assingment_BeeLingua.DAL\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Rodhi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://ecomindo.pkgs.visualstudio.com/Nexus/_packaging/Nexus.Base/nuget/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
+          "dependencies": {
+            "Nexus.Base.CosmosDBRepository": {
+              "target": "Package",
+              "version": "[3.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+Z:\Ecomindo\BeeLingua\Assingment_BeeLingua.API\Assingment_BeeLingua.BLL\bin\Debug\netcoreapp3.1\Assingment_BeeLingua.BLL.deps.json
+Z:\Ecomindo\BeeLingua\Assingment_BeeLingua.API\Assingment_BeeLingua.BLL\bin\Debug\netcoreapp3.1\Assingment_BeeLingua.BLL.dll
+Z:\Ecomindo\BeeLingua\Assingment_BeeLingua.API\Assingment_BeeLingua.BLL\bin\Debug\netcoreapp3.1\Assingment_BeeLingua.BLL.pdb
+Z:\Ecomindo\BeeLingua\Assingment_BeeLingua.API\Assingment_BeeLingua.BLL\bin\Debug\netcoreapp3.1\Assingment_BeeLingua.DAL.dll
+Z:\Ecomindo\BeeLingua\Assingment_BeeLingua.API\Assingment_BeeLingua.BLL\bin\Debug\netcoreapp3.1\Assingment_BeeLingua.DAL.pdb
+Z:\Ecomindo\BeeLingua\Assingment_BeeLingua.API\Assingment_BeeLingua.BLL\obj\Debug\netcoreapp3.1\Assingment_BeeLingua.BLL.csprojAssemblyReference.cache
+Z:\Ecomindo\BeeLingua\Assingment_BeeLingua.API\Assingment_BeeLingua.BLL\obj\Debug\netcoreapp3.1\Assingment_BeeLingua.BLL.AssemblyInfoInputs.cache
+Z:\Ecomindo\BeeLingua\Assingment_BeeLingua.API\Assingment_BeeLingua.BLL\obj\Debug\netcoreapp3.1\Assingment_BeeLingua.BLL.AssemblyInfo.cs
+Z:\Ecomindo\BeeLingua\Assingment_BeeLingua.API\Assingment_BeeLingua.BLL\obj\Debug\netcoreapp3.1\Assingment_BeeLingua.BLL.csproj.CoreCompileInputs.cache
+Z:\Ecomindo\BeeLingua\Assingment_BeeLingua.API\Assingment_BeeLingua.BLL\obj\Debug\netcoreapp3.1\Assingment_BeeLingua.BLL.csproj.CopyComplete
+Z:\Ecomindo\BeeLingua\Assingment_BeeLingua.API\Assingment_BeeLingua.BLL\obj\Debug\netcoreapp3.1\Assingment_BeeLingua.BLL.dll
+Z:\Ecomindo\BeeLingua\Assingment_BeeLingua.API\Assingment_BeeLingua.BLL\obj\Debug\netcoreapp3.1\Assingment_BeeLingua.BLL.pdb
