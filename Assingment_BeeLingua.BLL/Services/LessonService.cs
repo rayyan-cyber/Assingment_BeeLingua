@@ -24,9 +24,10 @@ namespace Assingment_BeeLingua.BLL.Services
             return await _repository.GetByIdAsync(id, pk);
         }
 
-        public async Task<PageResult<Lesson>> GetLessonAll()
+        public async Task<IEnumerable<Lesson>> GetLessonAll()
         {
-            return await _repository.GetAsync(predicate: null);
+            var data = await _repository.GetAsync(predicate: null);
+            return data.Items;
         }
 
         public async Task<Lesson> CreateLesson(Lesson dataToBeInserted)

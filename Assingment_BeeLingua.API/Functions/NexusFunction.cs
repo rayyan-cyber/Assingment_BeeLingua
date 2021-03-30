@@ -17,6 +17,7 @@ using System;
 using System.Net;
 using Nexus.Base.CosmosDBRepository;
 using AzureFunctions.Extensions.Swashbuckle.Attribute;
+using Newtonsoft.Json.Linq;
 
 namespace Assingment_BeeLingua.API.Functions
 {
@@ -80,12 +81,8 @@ namespace Assingment_BeeLingua.API.Functions
                 {
                     return new NotFoundObjectResult("Data is Empty!!!");
                 }
-                foreach (var item in data.Items)
-                {
-                    list.Add(_mapper.Map<LessonDTO>(item));
-
-                }
-                return new OkObjectResult(list);
+                var dataDTO = _mapper.Map<List<LessonDTO>>(data);
+                return new OkObjectResult(dataDTO);
             }
             catch (Exception ex)
             {
