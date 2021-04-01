@@ -34,8 +34,8 @@ namespace Assingment_BeeLingua.API.Functions
         private const string OutputFolderName = @"Output";
 
 
-        [FunctionName("UploadAsset")]
-        public async Task<IActionResult> UploadAsset(
+        [FunctionName("UploadEncodeAsset")]
+        public async Task<IActionResult> UploadEncodeAsset(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
             ILogger log)
         {
