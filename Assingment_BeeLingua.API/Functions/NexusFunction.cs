@@ -18,6 +18,7 @@ using System.Net;
 using Nexus.Base.CosmosDBRepository;
 using AzureFunctions.Extensions.Swashbuckle.Attribute;
 using Newtonsoft.Json.Linq;
+using System.Configuration;
 
 namespace Assingment_BeeLingua.API.Functions
 {
@@ -142,7 +143,6 @@ namespace Assingment_BeeLingua.API.Functions
                     return new NotFoundObjectResult("Data not found !!!!");
                 }
 
-                dataExisting.LessonCode = input.LessonCode;
                 dataExisting.Description = input.Description;
 
                 var data = await _lessonService.UpdateLesson(id, dataExisting);

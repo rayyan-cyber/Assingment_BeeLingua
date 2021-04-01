@@ -8,7 +8,7 @@
     ".NETCoreApp,Version=v3.1": {
       "Assingment_BeeLingua.DAL/1.0.0": {
         "dependencies": {
-          "Nexus.Base.CosmosDBRepository": "3.0.1"
+          "Nexus.Base.CosmosDBRepository": "3.1.1"
         },
         "runtime": {
           "Assingment_BeeLingua.DAL.dll": {}
@@ -250,7 +250,7 @@
           }
         }
       },
-      "Nexus.Base.CosmosDBRepository/3.0.1": {
+      "Nexus.Base.CosmosDBRepository/3.1.1": {
         "dependencies": {
           "Microsoft.Azure.Cosmos": "3.17.1",
           "Nexus.Base.EventGridExtensions": "2020.1.27.6",
@@ -1242,12 +1242,12 @@
       "path": "newtonsoft.json/10.0.3",
       "hashPath": "newtonsoft.json.10.0.3.nupkg.sha512"
     },
-    "Nexus.Base.CosmosDBRepository/3.0.1": {
+    "Nexus.Base.CosmosDBRepository/3.1.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-Nk4byi5PNT94F/e9cpzPUQTEHImf4+OdqpFRvMIocLDP/jzhHKOnMhtVvRH+jelydjd0bqM5uQrdiIBSie6YiA==",
-      "path": "nexus.base.cosmosdbrepository/3.0.1",
-      "hashPath": "nexus.base.cosmosdbrepository.3.0.1.nupkg.sha512"
+      "sha512": "sha512-JP4ro7mJiJcUMNXYYkTqdvCj2Y4S37p04qT8LKyMffZXGSJDh5zgBu1MK5v8USbMyo+R8TkxqX1ukV0N2mbC+g==",
+      "path": "nexus.base.cosmosdbrepository/3.1.1",
+      "hashPath": "nexus.base.cosmosdbrepository.3.1.1.nupkg.sha512"
     },
     "Nexus.Base.EventGridExtensions/2020.1.27.6": {
       "type": "package",

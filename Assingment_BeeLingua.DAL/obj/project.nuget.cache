@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "/vez3bF4kVzwLAmRofzV/pM5VzMbE5W4zyPpOp7rM3Pan/sc3ra3mw7r0QXO4ZoZAL7AuT2shPG6TrKBexNGHQ==",
+  "dgSpecHash": "oT6W/jZ1axQN4NcPgex5FqqVWCZdgoVY+I7opN5p0Pns8fqa2UGQz2DOpQOTNSniTUje2W8b5rbe0bkaZmEiIA==",
   "success": true,
   "projectFilePath": "Z:\\Ecomindo\\BeeLingua\\Assingment_BeeLingua.API\\Assingment_BeeLingua.DAL\\Assingment_BeeLingua.DAL.csproj",
   "expectedPackageFiles": [
@@ -19,7 +19,7 @@
     "C:\\Users\\Rodhi\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
     "C:\\Users\\Rodhi\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
     "C:\\Users\\Rodhi\\.nuget\\packages\\newtonsoft.json\\10.0.3\\newtonsoft.json.10.0.3.nupkg.sha512",
-    "C:\\Users\\Rodhi\\.nuget\\packages\\nexus.base.cosmosdbrepository\\3.0.1\\nexus.base.cosmosdbrepository.3.0.1.nupkg.sha512",
+    "C:\\Users\\Rodhi\\.nuget\\packages\\nexus.base.cosmosdbrepository\\3.1.1\\nexus.base.cosmosdbrepository.3.1.1.nupkg.sha512",
     "C:\\Users\\Rodhi\\.nuget\\packages\\nexus.base.eventgridextensions\\2020.1.27.6\\nexus.base.eventgridextensions.2020.1.27.6.nupkg.sha512",
     "C:\\Users\\Rodhi\\.nuget\\packages\\pipelines.sockets.unofficial\\2.1.16\\pipelines.sockets.unofficial.2.1.16.nupkg.sha512",
     "C:\\Users\\Rodhi\\.nuget\\packages\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",

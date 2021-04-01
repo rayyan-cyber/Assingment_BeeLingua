@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
+using Assingment_BeeLingua.BLL;
 using azure_functions_cosmosclient;
 using AzureFunctions.Extensions.Swashbuckle;
 using Microsoft.Azure.Cosmos.Fluent;
@@ -19,11 +21,20 @@ namespace azure_functions_cosmosclient
             .AddJsonFile("appsettings.json", true)
             .AddEnvironmentVariables()
             .Build();
+        public ConfigWrapper config = new ConfigWrapper(Configuration);
+
+        public Startup()
+        {
+            var SubscriptionId = Configuration["AadClientId"];
+            var SubscriptionIdd = config.AadClientId;
+            var SubscriptionIddd = config.AadClientId;
+            //services.Configure<ConfigWrapper>(Configuration);
+        }
 
         public override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddSingleton(s => {
-                var connectionString = Configuration["CosmosDBConnection"];
+                var connectionString = Configuration.GetConnectionString("CosmosDB");
                 if (string.IsNullOrEmpty(connectionString))
                 {
                     throw new InvalidOperationException(
@@ -35,6 +46,7 @@ namespace azure_functions_cosmosclient
             });
 
             builder.AddSwashBuckle(Assembly.GetExecutingAssembly());
+            
         }
     }
 }
