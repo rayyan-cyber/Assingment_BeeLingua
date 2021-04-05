@@ -6,6 +6,7 @@ namespace Assingment_BeeLingua.DAL.Models
 {
     public class NotificationLesson : ModelBase
     {
+        // TODO : bersihkan comment yang tdk terpakai
         //[JsonProperty("id")]
         //public string Id { get; set; }
 

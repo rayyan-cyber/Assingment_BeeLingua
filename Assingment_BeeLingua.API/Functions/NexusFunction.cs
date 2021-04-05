@@ -68,6 +68,7 @@ namespace Assingment_BeeLingua.API.Functions
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(string))]
         [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(string))]
         [FunctionName("GetLessonAll")]
+        // TODO: routing tdk konsisten ada yang lengkap routingnya, tp ada jg yang null?
         public async Task<IActionResult> GetLessonAll(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
             [SwaggerIgnore]  ILogger log)
