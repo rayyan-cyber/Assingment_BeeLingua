@@ -35,6 +35,16 @@ namespace Assingment_BeeLingua.BLL.Services
             return await _repository.CreateAsync(dataToBeInserted);
         }
 
+        public async Task<Lesson> CreateLessonEdited(string id)
+        {
+            var lesson = await _repository.GetByIdAsync(id);
+            //lesson.Id = null;
+            lesson.Description += "-Edited";
+
+            var lessonNew = await _repository.CreateAsync(lesson);
+            return lessonNew;
+        }
+
         public async Task<Lesson> UpdateLesson(string id, Lesson dataToBeUpdated)
         {
             return await _repository.UpdateAsync(id, dataToBeUpdated);

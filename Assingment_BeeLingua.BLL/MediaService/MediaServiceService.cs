@@ -66,7 +66,7 @@ namespace Assingment_BeeLingua.BLL.MediaService
             string fileToUpload)
         {
             Asset asset = await client.Assets.CreateOrUpdateAsync(resourceGroupName, accountName, assetName, new Asset());
-            
+            //Asset asset = client.Assets.Get(resourceGroupName, accountName, assetName);
             var response = await client.Assets.ListContainerSasAsync(
                 resourceGroupName,
                 accountName,
@@ -118,11 +118,6 @@ namespace Assingment_BeeLingua.BLL.MediaService
                 new JobOutputAsset(outputAssetName),
             };
 
-            // In this example, we are assuming that the job name is unique.
-            //
-            // If you already have a job with the desired name, use the Jobs.Get method
-            // to get the existing job. In Media Services v3, the Get method on entities returns null 
-            // if the entity doesn't exist (a case-insensitive check on the name).
             Job job = await client.Jobs.CreateAsync(
                 resourceGroupName,
                 accountName,
@@ -133,6 +128,12 @@ namespace Assingment_BeeLingua.BLL.MediaService
                     Input = jobInput,
                     Outputs = jobOutputs,
                 });
+
+            //Job job = client.Jobs.Get(
+            //    resourceGroupName,
+            //    accountName,
+            //    transformName,
+            //    jobName);
 
             return job;
         }

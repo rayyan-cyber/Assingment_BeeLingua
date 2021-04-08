@@ -27,7 +27,6 @@ namespace Assingment_BeeLingua.API.Functions
             .AddEnvironmentVariables()
             .Build();
         public ConfigWrapper config = new ConfigWrapper(Configuration);
-
         private readonly MediaServiceService _mediaService = new MediaServiceService();
         private const string AdaptiveStreamingTransformName = "Transform-AdaptiveStreaming-BL-Yaya";
         private const string InputMP4FileName = @"Nature.mp4";

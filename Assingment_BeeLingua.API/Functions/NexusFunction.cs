@@ -178,6 +178,30 @@ namespace Assingment_BeeLingua.API.Functions
             }
 
         }
+
+        //
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PageResult<Lesson>))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(string))]
+        [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(string))]
+        [FunctionName("CreateLessonEdited")]
+        public async Task<IActionResult> CreateLessonEdited(
+           [HttpTrigger(AuthorizationLevel.Function, "post", Route = "Lesson/CreateEdited/{id}")] HttpRequest req,
+           string id,
+           [RequestBodyType(typeof(Lesson), "CreateLesson request")]
+           [SwaggerIgnore] ILogger log)
+        {
+            try
+            {
+                var data = await _lessonService.CreateLessonEdited(id);
+                var dataDTO = _mapper.Map<LessonDTO>(data);
+
+                return new OkObjectResult(dataDTO);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+        }
     }
 }
 
