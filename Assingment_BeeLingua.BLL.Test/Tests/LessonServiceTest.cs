@@ -26,13 +26,6 @@ namespace Assingment_BeeLingua.BLL.Test.Tests
             public async Task GetDataById_ReusltFound(string id)
             {
                 var repo = new Mock<IDocumentDBRepository<Lesson>>();
-
-                //IEnumerable<Lesson> lessons = new List<Lesson>
-                //{
-                //    {new Lesson() { Id = "1", Description = "abcd"} },
-                //    {new Lesson() { Id = "2", Description = "xyz0"} }
-                //};
-
                 var lessonData = lessonList.Where(o => o.Id == id).First();
 
                 repo.Setup(c => c.GetByIdAsync(
@@ -134,8 +127,67 @@ namespace Assingment_BeeLingua.BLL.Test.Tests
             }
         }
 
-        // TODO: tambahin utk method GetLessonAll, DeleteLesson
-        // TODO: implement jg unit test mock tgl 07-april yang d demoin sama rizky
+        public class DeleteLesson
+        {
+            [Theory]
+            [InlineData("1")]
+            public async Task DeleteLesson_Deleted(string id)
+            {
+                var repo = new Mock<IDocumentDBRepository<Lesson>>();
+
+                var lessonExisting = lessonList.FirstOrDefault(L => L.Id == id).Id;
+                repo.Setup(c => c.GetByIdAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<Dictionary<string, string>>()
+                )).ReturnsAsync(
+                    (string id, Dictionary<string, string> pk) => lessonList.FirstOrDefault());
+
+                repo.Setup(c => c.DeleteAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<Dictionary<string, string>>(),
+                    It.IsAny<EventGridOptions>()
+                    )).Returns(Task.FromResult(new PageResult<Lesson>(lessonList, "")));
+
+                var svc = new LessonService(repo.Object);
+
+                var act = await svc.DeleteLesson(id, null);
+                Assert.Equal($"{lessonExisting}-Deleted", act);
+
+            }
+        }
+
+        public class CreateLessonEdited
+        {
+            [Theory]
+            [InlineData("1")]
+            public async Task CreateLessonEdited_CreatedEdited(string id)
+            {
+                var repo = new Mock<IDocumentDBRepository<Lesson>>();
+
+                var lessonExisting = lessonList.FirstOrDefault(L => L.Id == id).Description;
+                repo.Setup(c => c.GetByIdAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<Dictionary<string, string>>()
+                )).ReturnsAsync(
+                    (string id, Dictionary<string, string> pk) => lessonList.FirstOrDefault());
+
+                repo.Setup(c => c.CreateAsync(
+                    It.IsAny<Lesson>(),
+                    It.IsAny<EventGridOptions>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>()
+                    )).ReturnsAsync(
+                    (Lesson L, EventGridOptions evg, string str1, string str2) => L);
+
+                var svc = new LessonService(repo.Object);
+
+                var act = await svc.CreateLessonEdited(id, null);
+                Assert.Equal($"{lessonExisting}-Edited", act.Description);
+
+            }
+        }
+        // TODO: tambahin utk method GetLessonAll, DeleteLesson : DONE
+        // TODO: implement jg unit test mock tgl 07-april yang d demoin sama rizky : DONE
 
     }
 }

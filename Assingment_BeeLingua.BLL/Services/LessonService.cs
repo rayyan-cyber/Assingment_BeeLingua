@@ -35,10 +35,10 @@ namespace Assingment_BeeLingua.BLL.Services
             return await _repository.CreateAsync(dataToBeInserted);
         }
 
-        public async Task<Lesson> CreateLessonEdited(string id)
+        public async Task<Lesson> CreateLessonEdited(string id, Dictionary<string, string> pk)
         {
-            var lesson = await _repository.GetByIdAsync(id);
-            //lesson.Id = null;
+            var lesson = await _repository.GetByIdAsync(id, pk);
+            lesson.Id = null;
             lesson.Description += "-Edited";
 
             var lessonNew = await _repository.CreateAsync(lesson);
@@ -50,10 +50,15 @@ namespace Assingment_BeeLingua.BLL.Services
             return await _repository.UpdateAsync(id, dataToBeUpdated);
         }
 
-        public async Task<IActionResult> DeleteLesson(string id, Dictionary<string, string> pk)
+        public async Task<string> DeleteLesson(string id, Dictionary<string, string> pk)
         {
+            var lesson = await _repository.GetByIdAsync(id, pk);
+            var result = $"{id}-Deleted"; ;
+            if (lesson == null)
+            {
+                result = $"{id}-Not Found";
+            }
             await _repository.DeleteAsync(id, pk);
-            var result = new OkObjectResult("Deleted");
             return result;
         }
     }

@@ -6,17 +6,14 @@ namespace Assingment_BeeLingua.DAL.Models
 {
     public class NotificationLesson : ModelBase
     {
-        // TODO : bersihkan comment yang tdk terpakai
-        //[JsonProperty("id")]
-        //public string Id { get; set; }
+        // TODO : bersihkan comment yang tdk terpakai : DONE
 
         [JsonProperty("subject")]
         public string Subject { get; set; }
 
         [JsonProperty("data")]
-        //public Dictionary<string, string> Data { get; set; }
-        //public string Data { get; set; }
         public object Data { get; set; }
+
         [JsonProperty("eventType")]
         public string EventType { get; set; }
 

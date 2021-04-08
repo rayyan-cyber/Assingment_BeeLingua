@@ -45,7 +45,7 @@ namespace Assingment_BeeLingua.API.Functions
         [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(string))]
         [FunctionName("GetLessonById")]
         public async Task<IActionResult> GetLessonById(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Lesson/ReadById/{id}/{pk}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Lesson/GetById/{id}/{pk}")] HttpRequest req,
             string id,
             string pk,
             [SwaggerIgnore] ILogger log)
@@ -70,9 +70,9 @@ namespace Assingment_BeeLingua.API.Functions
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(string))]
         [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(string))]
         [FunctionName("GetLessonAll")]
-        // TODO: routing tdk konsisten ada yang lengkap routingnya, tp ada jg yang null?
+        // TODO: routing tdk konsisten ada yang lengkap routingnya, tp ada jg yang null? : DONE
         public async Task<IActionResult> GetLessonAll(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "Lesson/GetAll")] HttpRequest req,
             [SwaggerIgnore]  ILogger log)
         {
             try
@@ -97,7 +97,7 @@ namespace Assingment_BeeLingua.API.Functions
         [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(string))]
         [FunctionName("CreateLesson")]
         public async Task<IActionResult> CreateLesson(
-           [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+           [HttpTrigger(AuthorizationLevel.Function, "post", Route = "Lesson/Create")] HttpRequest req,
            [RequestBodyType(typeof(Lesson), "CreateLesson request")]
            [SwaggerIgnore] ILogger log)
         {
@@ -186,14 +186,15 @@ namespace Assingment_BeeLingua.API.Functions
         [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(string))]
         [FunctionName("CreateLessonEdited")]
         public async Task<IActionResult> CreateLessonEdited(
-           [HttpTrigger(AuthorizationLevel.Function, "post", Route = "Lesson/CreateEdited/{id}")] HttpRequest req,
+           [HttpTrigger(AuthorizationLevel.Function, "post", Route = "Lesson/CreateEdited/{id}/{pk}")] HttpRequest req,
            string id,
+           string pk,
            [RequestBodyType(typeof(Lesson), "CreateLesson request")]
            [SwaggerIgnore] ILogger log)
         {
             try
             {
-                var data = await _lessonService.CreateLessonEdited(id);
+                var data = await _lessonService.CreateLessonEdited(id, new Dictionary<string, string> { { "LessonCode", pk } });
                 var dataDTO = _mapper.Map<LessonDTO>(data);
 
                 return new OkObjectResult(dataDTO);
