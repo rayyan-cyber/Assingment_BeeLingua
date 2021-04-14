@@ -5,6 +5,11 @@ namespace Assingment_BeeLingua.DAL.Models.MediaService
 {
     public static class AssetAMSType
     {
+        public const string Article = "Article";
+        public const string Document = "Document";
+        public const string Forum = "Forum";
+        public const string Pdf = "Pdf";
+        public const string Null = null;
         public const string Video = "Video";
     }
 

@@ -14,14 +14,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Management.Media;
 using Microsoft.Azure.Management.Media.Models;
-using Microsoft.Azure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using static Assingment_BeeLingua.DAL.Repository.Repositories;
+using static Assingment_BeeLingua.BLL.MediaService.AzureStorageAccountService;
 
 namespace Assingment_BeeLingua.API.Functions.MediaService
 {
@@ -30,6 +30,9 @@ namespace Assingment_BeeLingua.API.Functions.MediaService
         private readonly MediaServiceService _mediaService;
         private readonly string envAmsCredential = Environment.GetEnvironmentVariable("AMSCredential");
         private readonly string encoderName = Environment.GetEnvironmentVariable("AdaptiveStreamingTransformName");
+        private readonly string envThumbnailPath = Environment.GetEnvironmentVariable("ResourceThumbnailPath");
+        public static readonly string envCAccountName = "stbltutorial";
+        public static readonly string envCAccountKey = "7adoccKevApsFz88+kc50Q85R42EAAxhU78ITpoEM6s18Q0iXgOLagfPgRJgummPs5cTS6Y/WTVqCKvSm5rfgA==";
         private const string OutputFolderName = @"Output";
         private ConfigAsset _configAsset = new ConfigAsset();
 
@@ -181,8 +184,6 @@ namespace Assingment_BeeLingua.API.Functions.MediaService
                 if (!Directory.Exists(OutputFolderName))
                     Directory.CreateDirectory(OutputFolderName);
 
-                await _mediaService.DownloadOutputAssetAsync(client, ams.ResourceGroup, ams.AccountName, outputName, OutputFolderName);
-
                 StreamingLocator locator = await _mediaService.CreateStreamingLocatorAsync(client, ams.ResourceGroup, ams.AccountName, outputName, locatorName);
 
                 IList<string> urls = await _mediaService.GetStreamingUrlsAsync(client, ams.ResourceGroup, ams.AccountName, locator.Name);
@@ -251,37 +252,18 @@ namespace Assingment_BeeLingua.API.Functions.MediaService
             }
             await Task.WhenAll(getPreview);
 
-            //// saving first thumbnail
-            //log.LogInformation("--- saving preview image (jpg)");
-            //var path = envThumbnailPath.Replace("{fileName}", $"{prop.Resource.Id}.jpg");
-            //var thumb = await ResourceController.SaveThumbnail(path, previewImage.FirstOrDefault());
+            // saving first thumbnail
+            if (previewImage.Any())
+            {
+                log.LogInformation("--- saving preview image (jpg)");
+                var path = envThumbnailPath.Replace("{fileName}", $"{prop.AssetAMS.Id}.jpg");
+                var thumb = await SaveThumbnail(path, previewImage.FirstOrDefault());
+            }
 
             log.LogInformation("--- ams > updating status data to publish");
             prop.AssetAMS.Status = "publish";
             prop.AssetAMS.Duration = ParseDuration(manifest.AssetFile.FirstOrDefault().Duration).ToString();
             await _mediaService.UpdateAssetAMS(prop.AssetAMS.Id, prop.AssetAMS);
-
-
-            //using (var httpClient = new HttpClient())
-            //{
-            //    var content = JsonConvert.SerializeObject(new
-            //    {
-            //        resourceId = prop.JobInput.ResourceId,
-            //        duration = prop.AssetAMS.Duration,
-            //    });
-
-            //    // new implement
-            //    var url = envContentResourceUrl.Replace("{status}", "publish");
-
-            //    // legacy
-            //    if (prop.JobInput.EventPostUrl != null)
-            //    {
-            //        url = prop.JobInput.EventPostUrl.Replace("{eventName}", "event-job-finish");
-            //    }
-
-            //    var body = new StringContent(content, Encoding.UTF8, "application/json");
-            //    await httpClient.PostAsync(url, body);
-            //}
 
             return manifest;
         }
@@ -319,6 +301,21 @@ namespace Assingment_BeeLingua.API.Functions.MediaService
         public static int ParseDuration(string stdDuration)
         {
             return (int)Math.Round(XmlConvert.ToTimeSpan(stdDuration).TotalSeconds);
+        }
+
+        public async Task<CloudBlockBlob> SaveThumbnail(string path, byte[] file)
+        {
+            AzureStorageAccountService storageAccount = new AzureStorageAccountService(new Config
+            {
+                ContainerName = "thumbnails",
+                AccountName = envCAccountName,
+                AccountKey = envCAccountKey,
+            }, path.Trim('/'));
+
+            using (Stream stream = new MemoryStream(file))
+            {
+                return await storageAccount.Upload(stream);
+            }
         }
         #endregion
     }
