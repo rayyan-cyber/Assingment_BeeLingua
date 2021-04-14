@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "9yrJDpYbJvZWabiZfZIP2PFbmr+Jeph8sI1djp/1DRM9ZZlIw1eDUe85xPLYydaZPVMtikpyas9ouKb6kVxirA==",
+  "dgSpecHash": "hxpaYJeLndWuJgoFDZkfP5Fdl15clf9TDM4qiE+zO3F0qoUpsF0eiqCrAghd/kzysqbzUJGzR6u5XqIB0DNhNA==",
   "success": true,
   "projectFilePath": "Z:\\Ecomindo\\BeeLingua\\Assingment_BeeLingua.API\\Assingment_BeeLingua.BLL\\Assingment_BeeLingua.BLL.csproj",
   "expectedPackageFiles": [
@@ -160,7 +160,8 @@
     "C:\\Users\\Rodhi\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\Rodhi\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Users\\Rodhi\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\Rodhi\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512"
+    "C:\\Users\\Rodhi\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512",
+    "C:\\Users\\Rodhi\\.nuget\\packages\\windowsazure.storage\\9.3.3\\windowsazure.storage.9.3.3.nupkg.sha512"
   ],
   "logs": []
 }

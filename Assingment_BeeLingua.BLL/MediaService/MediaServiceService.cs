@@ -1,35 +1,77 @@
-﻿using Azure.Storage.Blobs;
+﻿using Assingment_BeeLingua.DAL.Models.MediaService;
+using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Azure.Management.Media;
 using Microsoft.Azure.Management.Media.Models;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.Rest;
 using Microsoft.Rest.Azure.Authentication;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Nexus.Base.CosmosDBRepository;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Assingment_BeeLingua.DAL.Repository.Repositories;
 
 namespace Assingment_BeeLingua.BLL.MediaService
 {
     public class MediaServiceService
     {
-        public async Task<ServiceClientCredentials> GetCredentialsAsync(ConfigWrapper config)
+        private readonly IDocumentDBRepository<AssetAMS> _repository;
+        private ConfigAsset _configAsset = new ConfigAsset();
+        public MediaServiceService(IDocumentDBRepository<AssetAMS> repository)
         {
-            ClientCredential clientCredential = new ClientCredential(config.AadClientId, config.AadSecret);
-            return await ApplicationTokenProvider.LoginSilentAsync(config.AadTenantId, clientCredential, ActiveDirectoryServiceSettings.Azure);
-        }
-        public async Task<IAzureMediaServicesClient> CreateMediaServicesClientAsync(ConfigWrapper config)
-        {
-            var credentials = await GetCredentialsAsync(config);
-
-            return new AzureMediaServicesClient(config.ArmEndpoint, credentials)
+            if (this._repository == null)
             {
-                SubscriptionId = config.SubscriptionId,
+                this._repository = repository;
+            }
+        }
+
+        #region Repository Service
+        public async Task<AssetAMS> CreateAssetAMS(AssetAMS dataToBeInserted)
+        {
+            return await _repository.CreateAsync(dataToBeInserted);
+        }
+
+        public async Task<AssetAMS> UpdateAssetAMS(string id, AssetAMS dataToBeUpdated)
+        {
+            return await _repository.UpdateAsync(id, dataToBeUpdated);
+        }
+
+        public async Task<AssetAMS> GetAssetAMS(string id)
+        {
+           var data = (await _repository.GetAsync(e =>
+                e.Id == id &&
+                e.Status == "draft")).Items.FirstOrDefault();
+            return data;
+        }
+        #endregion
+
+        public async Task<Credential> GetCredentialAsync(Credential credential)
+        {
+            var clientCredential = new ClientCredential(
+                    credential.AadClientId,
+                    credential.AadSecret);
+
+            var cred = await ApplicationTokenProvider.LoginSilentAsync(
+                    credential.AadTenantId,
+                    clientCredential,
+                    ActiveDirectoryServiceSettings.Azure);
+
+            // create media service client
+            credential.Client = new AzureMediaServicesClient(credential.ArmEndpoint, cred)
+            {
+                SubscriptionId = credential.SubscriptionId,
             };
+
+            credential.Client.LongRunningOperationRetryTimeout = 2;
+
+            return credential;
         }
 
         public async Task<Transform> GetOrCreateTransformAsync(
@@ -58,6 +100,48 @@ namespace Assingment_BeeLingua.BLL.MediaService
             return transform;
         }
 
+        public async Task<Uri> InitVideoContainer(Credential credential, string contentAddress, string fileName)
+        {
+            #region 1. initialize
+            var inputAsset = new Asset(
+                name: string.Format(_configAsset.InputName, contentAddress), 
+                container: string.Format(_configAsset.InputName, contentAddress), 
+                description: string.Format(_configAsset.InputDescription, fileName));
+            #endregion
+
+            #region 2. set input
+            inputAsset = await credential.Client.Assets.CreateOrUpdateAsync(
+                credential.ResourceGroup,
+                credential.AccountName,
+                inputAsset.Container,
+                inputAsset);
+
+            var response = await credential.Client.Assets.ListContainerSasAsync(
+                credential.ResourceGroup,
+                credential.AccountName,
+                inputAsset.Name,
+                permissions: AssetContainerPermission.ReadWrite,
+                expiryTime: DateTime.Now.AddHours(6).ToUniversalTime());
+            #endregion
+
+            return new Uri(response.AssetContainerSasUrls.First());
+        }
+
+        public async Task<CloudBlockBlob> UploadFile(
+           Uri UploadUrl,
+           string filePath)
+        {
+            string fileName = Path.GetFileName(filePath);
+            //Uri accessUri = await GetAssetAccess(credential, asset, DateTime.Now.AddHours(6).ToUniversalTime());
+
+            CloudBlobContainer container = new CloudBlobContainer(UploadUrl);
+            var inputBlob = container.GetBlockBlobReference(fileName);
+
+            await inputBlob.UploadFromFileAsync(filePath);
+            return inputBlob;
+        }
+
+
         public async Task<Asset> CreateInputAssetAsync(
             IAzureMediaServicesClient client,
             string resourceGroupName,
@@ -75,7 +159,7 @@ namespace Assingment_BeeLingua.BLL.MediaService
                 expiryTime: DateTime.UtcNow.AddHours(4).ToUniversalTime());
 
             var sasUri = new Uri(response.AssetContainerSasUrls.First());
- 
+
             BlobContainerClient container = new BlobContainerClient(sasUri);
             BlobClient blob = container.GetBlobClient(Path.GetFileName(fileToUpload));
 
@@ -83,6 +167,7 @@ namespace Assingment_BeeLingua.BLL.MediaService
 
             return asset;
         }
+
 
         public async Task<Asset> CreateOutputAssetAsync(IAzureMediaServicesClient client, string resourceGroupName, string accountName, string assetName)
         {
@@ -108,17 +193,28 @@ namespace Assingment_BeeLingua.BLL.MediaService
             string transformName,
             string jobName,
             string inputAssetName,
-            string outputAssetName)
+            string resultName)
         {
             // Use the name of the created input asset to create the job input.
             JobInput jobInput = new JobInputAsset(assetName: inputAssetName);
 
             JobOutput[] jobOutputs =
             {
-                new JobOutputAsset(outputAssetName),
+                new JobOutputAsset(resultName),
             };
 
-            Job job = await client.Jobs.CreateAsync(
+            Job job = await client.Jobs.GetAsync(resourceGroupName, accountName,
+                    transformName, jobName);
+
+            if (job != null)
+            {
+                await client.Jobs.DeleteAsync(resourceGroupName, accountName,
+                    transformName, jobName);
+
+                // buat sinkronisasi
+                await Task.Delay(3000);
+            }
+            job = await client.Jobs.CreateAsync(
                 resourceGroupName,
                 accountName,
                 transformName,
@@ -128,13 +224,6 @@ namespace Assingment_BeeLingua.BLL.MediaService
                     Input = jobInput,
                     Outputs = jobOutputs,
                 });
-
-            //Job job = client.Jobs.Get(
-            //    resourceGroupName,
-            //    accountName,
-            //    transformName,
-            //    jobName);
-
             return job;
         }
 

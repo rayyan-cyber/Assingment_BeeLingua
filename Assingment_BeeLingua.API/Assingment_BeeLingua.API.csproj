@@ -7,6 +7,7 @@
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="AzureExtensions.Swashbuckle" Version="3.3.2" />
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.17.1" />
+    <PackageReference Include="Microsoft.Azure.EventHubs.Processor" Version="4.3.1" />
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.DurableTask" Version="2.1.1" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.EventHubs" Version="4.1.1" />

@@ -1,4 +1,5 @@
 ﻿using Assingment_BeeLingua.DAL.Models;
+using Assingment_BeeLingua.DAL.Models.MediaService;
 using Microsoft.Azure.Cosmos;
 using Nexus.Base.CosmosDBRepository;
 using System;
@@ -20,6 +21,13 @@ namespace Assingment_BeeLingua.DAL.Repository
         public class NotificationLessonRepository : DocumentDBRepository<NotificationLesson>
         {
             public NotificationLessonRepository(CosmosClient client) : base("Course", client)
+            { }
+        }
+
+        public class MediaServiceRepository : DocumentDBRepository<AssetAMS>
+        {
+            public MediaServiceRepository(CosmosClient client) : base("MigrationMedia", client, partitionProperties: "Category",
+                eventGridEndPoint: _eventGridEndPoint, eventGridKey: _eventGridKey)
             { }
         }
     }

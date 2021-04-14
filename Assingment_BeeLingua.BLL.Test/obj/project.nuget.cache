@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "UAh+hvStoKxV7Lbp08bzitIi6q/58eFnZnsVD+5VbdyJucf/UMMpL/jidiJdterfQxJ7Q5BI+erKCvSg06T58g==",
+  "dgSpecHash": "CVvJyG/3KzqPp3qt0i9v03cxIz7e0H+wd4YRyRIxWNCYF5zHrtemGYJQm9SQXhkor6MZPH5fupSFtT827Jkqrw==",
   "success": true,
   "projectFilePath": "Z:\\Ecomindo\\BeeLingua\\Assingment_BeeLingua.API\\Assingment_BeeLingua.BLL.Test\\Assingment_BeeLingua.BLL.Test.csproj",
   "expectedPackageFiles": [
@@ -172,6 +172,7 @@
     "C:\\Users\\Rodhi\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Users\\Rodhi\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
     "C:\\Users\\Rodhi\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512",
+    "C:\\Users\\Rodhi\\.nuget\\packages\\windowsazure.storage\\9.3.3\\windowsazure.storage.9.3.3.nupkg.sha512",
     "C:\\Users\\Rodhi\\.nuget\\packages\\xunit\\2.4.0\\xunit.2.4.0.nupkg.sha512",
     "C:\\Users\\Rodhi\\.nuget\\packages\\xunit.abstractions\\2.0.2\\xunit.abstractions.2.0.2.nupkg.sha512",
     "C:\\Users\\Rodhi\\.nuget\\packages\\xunit.analyzers\\0.10.0\\xunit.analyzers.0.10.0.nupkg.sha512",

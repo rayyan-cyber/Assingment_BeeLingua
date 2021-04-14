@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31105.61
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assingment_BeeLingua.API", "Assingment_BeeLingua.API\Assingment_BeeLingua.API.csproj", "{FA8A51E5-8ED4-4759-8E3A-A858B2A3D2EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assingment_BeeLingua.API", "Assingment_BeeLingua.API\Assingment_BeeLingua.API.csproj", "{FA8A51E5-8ED4-4759-8E3A-A858B2A3D2EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assingment_BeeLingua.DAL", "Assingment_BeeLingua.DAL\Assingment_BeeLingua.DAL.csproj", "{BE6531E3-24E5-44FB-8CEA-8C2DE5DD5F28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assingment_BeeLingua.DAL", "Assingment_BeeLingua.DAL\Assingment_BeeLingua.DAL.csproj", "{BE6531E3-24E5-44FB-8CEA-8C2DE5DD5F28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assingment_BeeLingua.BLL", "Assingment_BeeLingua.BLL\Assingment_BeeLingua.BLL.csproj", "{A151AFF7-1836-47E7-9074-A70BFE1EDACC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assingment_BeeLingua.BLL", "Assingment_BeeLingua.BLL\Assingment_BeeLingua.BLL.csproj", "{A151AFF7-1836-47E7-9074-A70BFE1EDACC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assingment_BeeLingua.BLL.Test", "Assingment_BeeLingua.BLL.Test\Assingment_BeeLingua.BLL.Test.csproj", "{7E367745-2B71-4961-8A56-62B924E33456}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assingment_BeeLingua.BLL.Test", "Assingment_BeeLingua.BLL.Test\Assingment_BeeLingua.BLL.Test.csproj", "{7E367745-2B71-4961-8A56-62B924E33456}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

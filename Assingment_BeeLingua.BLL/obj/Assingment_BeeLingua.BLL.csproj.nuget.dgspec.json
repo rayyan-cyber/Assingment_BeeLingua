@@ -68,6 +68,10 @@
             "Microsoft.Rest.ClientRuntime.Azure.Authentication": {
               "target": "Package",
               "version": "[2.4.1, )"
+            },
+            "WindowsAzure.Storage": {
+              "target": "Package",
+              "version": "[9.3.3, )"
             }
           },
           "imports": [

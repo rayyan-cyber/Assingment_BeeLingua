@@ -21,14 +21,6 @@ namespace azure_functions_cosmosclient
             .AddJsonFile("appsettings.json", true)
             .AddEnvironmentVariables()
             .Build();
-        public ConfigWrapper _config;
-
-        public Startup()
-        {
-            var SubscriptionId = Configuration["AadClientId"];
-            //services.Configure<ConfigWrapper>(Configuration);
-           _config = new ConfigWrapper(Configuration);
-        }
 
         public override void Configure(IFunctionsHostBuilder builder)
         {
