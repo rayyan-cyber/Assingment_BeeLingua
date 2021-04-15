@@ -17,8 +17,6 @@ using System;
 using System.Net;
 using Nexus.Base.CosmosDBRepository;
 using AzureFunctions.Extensions.Swashbuckle.Attribute;
-using Newtonsoft.Json.Linq;
-using System.Configuration;
 
 namespace Assingment_BeeLingua.API.Functions
 {

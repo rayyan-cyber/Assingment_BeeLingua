@@ -46,8 +46,7 @@ namespace Assingment_BeeLingua.BLL.MediaService
         public async Task<AssetAMS> GetAssetAMS(string id)
         {
            var data = (await _repository.GetAsync(e =>
-                e.Id == id &&
-                e.Status == "draft")).Items.FirstOrDefault();
+                e.Id == id)).Items.FirstOrDefault();
             return data;
         }
         #endregion
@@ -74,6 +73,56 @@ namespace Assingment_BeeLingua.BLL.MediaService
             return credential;
         }
 
+        public static StandardEncoderPreset encoderPreset = new StandardEncoderPreset(
+        codecs: new Codec[]
+        {
+            new AacAudio(
+                channels: 2,
+                samplingRate: 48000,
+                bitrate: 128000,
+                profile: AacAudioProfile.AacLc
+            ),
+
+            new H264Video(
+                layers:  new H264Layer[]
+                {
+                    new H264Layer // Resolution: 1280x720
+                    {
+                        Bitrate=1800000,
+                        Width="1280",
+                        Height="720",
+                        Label="HD",
+                    },
+                    new H264Layer // YouTube 144p: 256×144
+                    {
+                        Bitrate=64000,
+                        Width="256",
+                        Height="144",
+                        Label="SD",
+                    }
+                }),
+
+            new JpgImage(
+                start: "{Best}",
+//                    step: "25%",
+//                    range: "60%",
+                layers: new JpgLayer[] {
+                    new JpgLayer(
+                        width: "100%",
+                        height: "100%"
+                    ),
+                })
+        },
+        formats: new Format[]
+        {
+            new Mp4Format(
+                filenamePattern:"Video-{Basename}-{Label}-{Bitrate}{Extension}"
+            ),
+            new JpgFormat(
+                filenamePattern:"Thumbnail-{Basename}-{Index}{Extension}"
+            )
+        });
+
         public async Task<Transform> GetOrCreateTransformAsync(
            IAzureMediaServicesClient client,
            string resourceGroupName,
@@ -84,17 +133,9 @@ namespace Assingment_BeeLingua.BLL.MediaService
 
             if (transform == null)
             {
-                TransformOutput[] output = new TransformOutput[]
-                {
-                    new TransformOutput
-                    {
-                        Preset = new BuiltInStandardEncoderPreset()
-                        {
-                            PresetName = EncoderNamedPreset.AdaptiveStreaming
-                        }
-                    }
-                };
-                transform = await client.Transforms.CreateOrUpdateAsync(resourceGroupName, accountName, transformName, output);
+                transform = await client.Transforms.CreateOrUpdateAsync(resourceGroupName, accountName, transformName, new List<TransformOutput>{
+                    new TransformOutput(encoderPreset)
+                });
             }
 
             return transform;
@@ -132,8 +173,7 @@ namespace Assingment_BeeLingua.BLL.MediaService
            string filePath)
         {
             string fileName = Path.GetFileName(filePath);
-            //Uri accessUri = await GetAssetAccess(credential, asset, DateTime.Now.AddHours(6).ToUniversalTime());
-
+         
             CloudBlobContainer container = new CloudBlobContainer(UploadUrl);
             var inputBlob = container.GetBlockBlobReference(fileName);
 
@@ -142,49 +182,13 @@ namespace Assingment_BeeLingua.BLL.MediaService
         }
 
 
-        public async Task<Asset> CreateInputAssetAsync(
-            IAzureMediaServicesClient client,
-            string resourceGroupName,
-            string accountName,
-            string assetName,
-            string fileToUpload)
+        public async Task<Asset> CreateOutputAssetAsync(IAzureMediaServicesClient client, string resourceGroupName, string accountName, string outputName, string fileName)
         {
-            Asset asset = await client.Assets.CreateOrUpdateAsync(resourceGroupName, accountName, assetName, new Asset());
-            //Asset asset = client.Assets.Get(resourceGroupName, accountName, assetName);
-            var response = await client.Assets.ListContainerSasAsync(
-                resourceGroupName,
-                accountName,
-                assetName,
-                permissions: AssetContainerPermission.ReadWrite,
-                expiryTime: DateTime.UtcNow.AddHours(4).ToUniversalTime());
-
-            var sasUri = new Uri(response.AssetContainerSasUrls.First());
-
-            BlobContainerClient container = new BlobContainerClient(sasUri);
-            BlobClient blob = container.GetBlobClient(Path.GetFileName(fileToUpload));
-
-            await blob.UploadAsync(fileToUpload);
-
-            return asset;
-        }
-
-
-        public async Task<Asset> CreateOutputAssetAsync(IAzureMediaServicesClient client, string resourceGroupName, string accountName, string assetName)
-        {
-            Asset outputAsset = await client.Assets.GetAsync(resourceGroupName, accountName, assetName);
-            Asset asset = new Asset();
-            string outputAssetName = assetName;
-
-            if (outputAsset != null)
-            {
-                string uniqueness = $"-{Guid.NewGuid():N}";
-                outputAssetName += uniqueness;
-
-                Console.WriteLine("Warning – found an existing Asset with name = " + assetName);
-                Console.WriteLine("Creating an Asset with this name instead: " + outputAssetName);
-            }
-
-            return await client.Assets.CreateOrUpdateAsync(resourceGroupName, accountName, outputAssetName, asset);
+            var outputAsset = new Asset(name: outputName, container: outputName, description: $"encode \"{fileName}\"");
+            await client.Assets.DeleteAsync(resourceGroupName,accountName,
+                outputName);
+            return await client.Assets.CreateOrUpdateAsync(resourceGroupName,
+                accountName, outputName, outputAsset);
         }
 
         public async Task<Job> SubmitJobAsync(IAzureMediaServicesClient client,
@@ -261,60 +265,6 @@ namespace Assingment_BeeLingua.BLL.MediaService
             while (job.State != JobState.Finished && job.State != JobState.Error && job.State != JobState.Canceled);
 
             return job;
-        }
-
-       public async Task DownloadOutputAssetAsync(
-           IAzureMediaServicesClient client,
-           string resourceGroup,
-           string accountName,
-           string assetName,
-           string outputFolderName)
-        {
-            if (!Directory.Exists(outputFolderName))
-            {
-                Directory.CreateDirectory(outputFolderName);
-            }
-
-            AssetContainerSas assetContainerSas = await client.Assets.ListContainerSasAsync(
-                resourceGroup,
-                accountName,
-                assetName,
-                permissions: AssetContainerPermission.Read,
-                expiryTime: DateTime.UtcNow.AddHours(1).ToUniversalTime());
-
-            Uri containerSasUrl = new Uri(assetContainerSas.AssetContainerSasUrls.FirstOrDefault());
-            BlobContainerClient container = new BlobContainerClient(containerSasUrl);
-
-            string directory = Path.Combine(outputFolderName, assetName);
-            Directory.CreateDirectory(directory);
-
-            Console.WriteLine($"Downloading output results to '{directory}'...");
-
-            string continuationToken = null;
-            IList<Task> downloadTasks = new List<Task>();
-
-            do
-            {
-                var resultSegment = container.GetBlobs().AsPages(continuationToken);
-
-                foreach (Azure.Page<BlobItem> blobPage in resultSegment)
-                {
-                    foreach (BlobItem blobItem in blobPage.Values)
-                    {
-                        var blobClient = container.GetBlobClient(blobItem.Name);
-                        string filename = Path.Combine(directory, blobItem.Name);
-
-                        downloadTasks.Add(blobClient.DownloadToAsync(filename));
-                    }
-                    // Get the continuation token and loop until it is empty.
-                    continuationToken = blobPage.ContinuationToken;
-                }
-
-            } while (continuationToken != "");
-
-            await Task.WhenAll(downloadTasks);
-
-            Console.WriteLine("Download complete.");
         }
 
         public async Task<StreamingLocator> CreateStreamingLocatorAsync(

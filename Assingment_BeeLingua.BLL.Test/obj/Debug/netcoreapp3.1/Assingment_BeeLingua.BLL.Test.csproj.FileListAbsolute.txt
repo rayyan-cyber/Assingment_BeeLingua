@@ -169,3 +169,4 @@ Z:\Ecomindo\BeeLingua\Assingment_BeeLingua.API\Assingment_BeeLingua.BLL.Test\bin
 Z:\Ecomindo\BeeLingua\Assingment_BeeLingua.API\Assingment_BeeLingua.BLL.Test\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Logging.dll
 Z:\Ecomindo\BeeLingua\Assingment_BeeLingua.API\Assingment_BeeLingua.BLL.Test\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Tokens.dll
 Z:\Ecomindo\BeeLingua\Assingment_BeeLingua.API\Assingment_BeeLingua.BLL.Test\bin\Debug\netcoreapp3.1\Microsoft.Rest.ClientRuntime.Azure.Authentication.dll
+Z:\Ecomindo\BeeLingua\Assingment_BeeLingua.API\Assingment_BeeLingua.BLL.Test\bin\Debug\netcoreapp3.1\Microsoft.WindowsAzure.Storage.dll

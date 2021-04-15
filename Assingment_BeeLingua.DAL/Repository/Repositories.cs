@@ -26,7 +26,7 @@ namespace Assingment_BeeLingua.DAL.Repository
 
         public class MediaServiceRepository : DocumentDBRepository<AssetAMS>
         {
-            public MediaServiceRepository(CosmosClient client) : base("MigrationMedia", client, partitionProperties: "Category",
+            public MediaServiceRepository(CosmosClient client) : base("MigrationMedia", client, partitionProperties: "Subject",
                 eventGridEndPoint: _eventGridEndPoint, eventGridKey: _eventGridKey)
             { }
         }
