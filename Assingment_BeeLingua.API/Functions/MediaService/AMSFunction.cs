@@ -45,8 +45,8 @@ namespace Assingment_BeeLingua.API.Functions.MediaService
             _mediaService ??= new MediaServiceService(new MediaServiceRepository(client));
         }
 
-        [FunctionName("AMS_HttpStart")]
-        public async Task<IActionResult> AMS_HttpStart(
+        [FunctionName("AMS_EncodingStart")]
+        public async Task<IActionResult> AMS_EncodingStart(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "AMS/StartEncode")] HttpRequest req,
             [DurableClient] IDurableOrchestrationClient starter,
             ILogger log)
@@ -65,7 +65,7 @@ namespace Assingment_BeeLingua.API.Functions.MediaService
             };
             var inputConfigAsset = JsonConvert.SerializeObject(configAsset);
 
-            var instanceId = await starter.StartNewAsync("AMS_RunEncode", input:inputConfigAsset);
+            var instanceId = await starter.StartNewAsync("AMS_EncodeOrchestrator", input:inputConfigAsset);
             var payload = starter.CreateHttpManagementPayload(instanceId);
 
             return new OkObjectResult(new
@@ -77,8 +77,8 @@ namespace Assingment_BeeLingua.API.Functions.MediaService
             });
         }
 
-        [FunctionName("AMS_RunEncode")]
-        public async Task<List<string>> AMS_RunEncode(
+        [FunctionName("AMS_EncodeOrchestrator")]
+        public async Task<List<string>> AMS_EncodeOrchestrator(
             [OrchestrationTrigger] IDurableOrchestrationContext context,
             ILogger log)
         {
@@ -105,18 +105,6 @@ namespace Assingment_BeeLingua.API.Functions.MediaService
         }
 
         #region Durable Function
-        #region Get AssetAMS
-        [FunctionName("AMS_GetAssetAMS")]
-        public async Task<AssetAMS> AMS_GetAssetAMS(
-            [ActivityTrigger] IDurableActivityContext activityContext,
-            ILogger log)
-        {
-            var resourceId = activityContext.GetInput<string>();
-            var resource = await _mediaService.GetAssetAMS(resourceId); 
-            return resource;
-        }
-        #endregion
-
         #region AMS Encode
         [FunctionName("AMS_Encode")]
         public async Task AMS_Encode(
