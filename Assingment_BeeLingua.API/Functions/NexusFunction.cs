@@ -95,8 +95,8 @@ namespace Assingment_BeeLingua.API.Functions
         [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(string))]
         [FunctionName("CreateLesson")]
         public async Task<IActionResult> CreateLesson(
-           [HttpTrigger(AuthorizationLevel.Function, "post", Route = "Lesson/Create")] HttpRequest req,
-           [RequestBodyType(typeof(Lesson), "CreateLesson request")]
+           [HttpTrigger(AuthorizationLevel.Function, "post", Route = "Lesson/Create")]
+           [RequestBodyType(typeof(Lesson), "CreateLesson request")]  HttpRequest req,
            [SwaggerIgnore] ILogger log)
         {
             try
@@ -126,8 +126,8 @@ namespace Assingment_BeeLingua.API.Functions
         [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(string))]
         [FunctionName("UpdateLesson")]
         public async Task<IActionResult> UpdateLesson(
-           [HttpTrigger(AuthorizationLevel.Function, "post", Route = "Lesson/Update/{id}")] HttpRequest req,
-           [RequestBodyType(typeof(Lesson), "UpdateLesson request")]
+           [HttpTrigger(AuthorizationLevel.Function, "post", Route = "Lesson/Update/{id}")]
+           [RequestBodyType(typeof(Lesson), "UpdateLesson request")] HttpRequest req,
            string id,
            [SwaggerIgnore] ILogger log)
         {
@@ -176,31 +176,6 @@ namespace Assingment_BeeLingua.API.Functions
                 return new BadRequestObjectResult(ex.Message);
             }
 
-        }
-
-        //
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PageResult<Lesson>))]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(string))]
-        [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(string))]
-        [FunctionName("CreateLessonEdited")]
-        public async Task<IActionResult> CreateLessonEdited(
-           [HttpTrigger(AuthorizationLevel.Function, "post", Route = "Lesson/CreateEdited/{id}/{pk}")] HttpRequest req,
-           string id,
-           string pk,
-           [RequestBodyType(typeof(Lesson), "CreateLesson request")]
-           [SwaggerIgnore] ILogger log)
-        {
-            try
-            {
-                var data = await _lessonService.CreateLessonEdited(id, new Dictionary<string, string> { { "LessonCode", pk } });
-                var dataDTO = _mapper.Map<LessonDTO>(data);
-
-                return new OkObjectResult(dataDTO);
-            }
-            catch (Exception ex)
-            {
-                return new BadRequestObjectResult(ex.Message);
-            }
         }
     }
 }

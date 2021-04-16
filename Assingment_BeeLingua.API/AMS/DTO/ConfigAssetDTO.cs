@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Assingment_BeeLingua.API.Functions.MediaService.DTO
+﻿
+namespace Assingment_BeeLingua.API.AMS.DTO
 {
     public class ConfigAssetDTO
     {

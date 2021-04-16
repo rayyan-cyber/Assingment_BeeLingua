@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Assingment_BeeLingua.DAL.Models.MediaService
+namespace Assingment_BeeLingua.DAL.Models.AMS
 {
     public class FileExtension
     {

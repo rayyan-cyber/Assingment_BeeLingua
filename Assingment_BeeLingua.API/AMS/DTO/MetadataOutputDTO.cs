@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Assingment_BeeLingua.API.Functions.MediaService.DTO
+namespace Assingment_BeeLingua.API.AMS.DTO
 {
     public class MetadataOutputDTO
     {

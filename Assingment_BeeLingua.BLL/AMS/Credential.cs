@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Assingment_BeeLingua.BLL
+namespace Assingment_BeeLingua.BLL.AMS
 {
     public class Credential
     {

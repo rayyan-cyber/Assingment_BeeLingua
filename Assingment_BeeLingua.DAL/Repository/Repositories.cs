@@ -1,5 +1,5 @@
 ﻿using Assingment_BeeLingua.DAL.Models;
-using Assingment_BeeLingua.DAL.Models.MediaService;
+using Assingment_BeeLingua.DAL.Models.AMS;
 using Microsoft.Azure.Cosmos;
 using Nexus.Base.CosmosDBRepository;
 using System;

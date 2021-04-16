@@ -1,4 +1,4 @@
-﻿using Assingment_BeeLingua.DAL.Models.MediaService;
+﻿using Assingment_BeeLingua.DAL.Models.AMS;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Azure.Management.Media;
@@ -18,13 +18,13 @@ using System.Text;
 using System.Threading.Tasks;
 using static Assingment_BeeLingua.DAL.Repository.Repositories;
 
-namespace Assingment_BeeLingua.BLL.MediaService
+namespace Assingment_BeeLingua.BLL.AMS
 {
-    public class MediaServiceService
+    public class AMSService
     {
         private readonly IDocumentDBRepository<AssetAMS> _repository;
         private ConfigAsset _configAsset = new ConfigAsset();
-        public MediaServiceService(IDocumentDBRepository<AssetAMS> repository)
+        public AMSService(IDocumentDBRepository<AssetAMS> repository)
         {
             if (this._repository == null)
             {
@@ -184,9 +184,11 @@ namespace Assingment_BeeLingua.BLL.MediaService
 
         public async Task<Asset> CreateOutputAssetAsync(IAzureMediaServicesClient client, string resourceGroupName, string accountName, string outputName, string fileName)
         {
-            var outputAsset = new Asset(name: outputName, container: outputName, description: $"encode \"{fileName}\"");
-            await client.Assets.DeleteAsync(resourceGroupName,accountName,
+            await client.Assets.DeleteAsync(resourceGroupName, accountName,
                 outputName);
+            await Task.Delay(3000);
+
+            var outputAsset = new Asset(name: outputName, container: outputName, description: $"encode \"{fileName}\"");
             return await client.Assets.CreateOrUpdateAsync(resourceGroupName,
                 accountName, outputName, outputAsset);
         }

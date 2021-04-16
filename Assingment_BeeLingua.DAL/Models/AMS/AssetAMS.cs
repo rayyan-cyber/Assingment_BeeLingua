@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Nexus.Base.CosmosDBRepository;
 using System;
-namespace Assingment_BeeLingua.DAL.Models.MediaService
+namespace Assingment_BeeLingua.DAL.Models.AMS
 {
     public static class AssetAMSType
     {

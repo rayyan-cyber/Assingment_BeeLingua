@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Assingment_BeeLingua.DAL.Models.MediaService
+namespace Assingment_BeeLingua.DAL.Models.AMS
 {
     public class Amsv3Manifest
     {   

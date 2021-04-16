@@ -4,9 +4,8 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Assingment_BeeLingua.BLL.MediaService
+namespace Assingment_BeeLingua.BLL.AMS
 {
-    [Obsolete]
     public class AzureStorageAccountService
     {
         public static string envConnectionString = Environment.GetEnvironmentVariable("AzureStorageAccountCredential");

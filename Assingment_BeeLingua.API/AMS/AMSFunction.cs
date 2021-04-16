@@ -2,13 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
-using Assingment_BeeLingua.BLL;
-using Assingment_BeeLingua.BLL.MediaService;
-using Assingment_BeeLingua.DAL.Models.MediaService;
+using Assingment_BeeLingua.BLL.AMS;
+using Assingment_BeeLingua.DAL.Models.AMS;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Cosmos;
@@ -21,14 +17,16 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using static Assingment_BeeLingua.DAL.Repository.Repositories;
-using static Assingment_BeeLingua.BLL.MediaService.AzureStorageAccountService;
-using Assingment_BeeLingua.API.Functions.MediaService.DTO;
+using static Assingment_BeeLingua.BLL.AMS.AzureStorageAccountService;
+using Assingment_BeeLingua.API.AMS.DTO;
+using AzureFunctions.Extensions.Swashbuckle.Attribute;
+using System.Net;
 
-namespace Assingment_BeeLingua.API.Functions.MediaService
+namespace Assingment_BeeLingua.API.AMS
 {
     public class AMSFunction
     {
-        private readonly MediaServiceService _mediaService;
+        private readonly AMSService _amsService;
 
         private readonly string envAmsCredential = Environment.GetEnvironmentVariable("AMSCredential");
         public static readonly string envPhysicalFilesDir = @"Upload\";//Z:\Ecomindo\BeeLingua\MediaService\";
@@ -42,19 +40,23 @@ namespace Assingment_BeeLingua.API.Functions.MediaService
 
         public AMSFunction(CosmosClient client)
         {
-            _mediaService ??= new MediaServiceService(new MediaServiceRepository(client));
+            _amsService ??= new AMSService(new MediaServiceRepository(client));
         }
 
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(string))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(string))]
+        [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(string))]
         [FunctionName("AMS_EncodingStart")]
         public async Task<IActionResult> AMS_EncodingStart(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "AMS/StartEncode")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "AMS/StartEncode")]
+            [RequestBodyType(typeof(DFJobInputDTO), "CreateLesson request")] HttpRequest req,
             [DurableClient] IDurableOrchestrationClient starter,
-            ILogger log)
+            [SwaggerIgnore] ILogger log)
         {
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             var reqBody = JsonConvert.DeserializeObject<DFJobInputDTO>(requestBody);
 
-            var assetAMS = await _mediaService.GetAssetAMS(reqBody.AssetId);
+            var assetAMS = await _amsService.GetAssetAMS(reqBody.AssetId);
             var configAsset = new ConfigAssetDTO()
             {
                  AssetID = reqBody.AssetId,
@@ -94,14 +96,15 @@ namespace Assingment_BeeLingua.API.Functions.MediaService
                 outputs.Add($"Streaming URL : {streamingUrl}");
 
                 var manifest = await context.CallActivityAsync<Amsv3Manifest>("AMS_Finalize", input);
+                return outputs;
             }
             catch (Exception ex)
             {
                 log.LogError(ex.Message);
                 log.LogInformation(ex.StackTrace);
+                outputs.Add($"Error : {ex.Message}");
+                return outputs;
             }
-
-            return outputs;
         }
 
         #region Durable Function
@@ -115,18 +118,18 @@ namespace Assingment_BeeLingua.API.Functions.MediaService
             {
                 string inputValue = activityContext.GetInput<string>();
                 var data = JsonConvert.DeserializeObject<ConfigAssetDTO>(inputValue);
-                var assetAMS = await _mediaService.GetAssetAMS(data.AssetID);
+                var assetAMS = await _amsService.GetAssetAMS(data.AssetID);
                 assetAMS.Status = "encoding";
-                await _mediaService.UpdateAssetAMS(assetAMS.Id, assetAMS);
+                await _amsService.UpdateAssetAMS(assetAMS.Id, assetAMS);
 
-                var ams = await _mediaService.GetCredentialAsync(JsonConvert
+                var ams = await _amsService.GetCredentialAsync(JsonConvert
                         .DeserializeObject<Credential>(envAmsCredential));
                 IAzureMediaServicesClient client = ams.Client;
 
-                await _mediaService.GetOrCreateTransformAsync(client, ams.ResourceGroup, ams.AccountName, envEncoderName);
+                await _amsService.GetOrCreateTransformAsync(client, ams.ResourceGroup, ams.AccountName, envEncoderName);
 
-                _ = await _mediaService.CreateOutputAssetAsync(client, ams.ResourceGroup, ams.AccountName, data.OutputName, assetAMS.Filename);
-                _ = await _mediaService.SubmitJobAsync(client, ams.ResourceGroup, ams.AccountName, envEncoderName, data.JobName, data.InputName, data.OutputName);
+                _ = await _amsService.CreateOutputAssetAsync(client, ams.ResourceGroup, ams.AccountName, data.OutputName, assetAMS.Filename);
+                _ = await _amsService.SubmitJobAsync(client, ams.ResourceGroup, ams.AccountName, envEncoderName, data.JobName, data.InputName, data.OutputName);
             }
             catch (Exception e)
             {
@@ -151,7 +154,7 @@ namespace Assingment_BeeLingua.API.Functions.MediaService
             var ams = await GetAmsCredential(log);
             IAzureMediaServicesClient client = ams.Client;
 
-            Job job = await _mediaService.WaitForJobToFinishAsync(client, ams.ResourceGroup, ams.AccountName, envEncoderName, data.JobName);
+            Job job = await _amsService.WaitForJobToFinishAsync(client, ams.ResourceGroup, ams.AccountName, envEncoderName, data.JobName);
             if (job.State != JobState.Finished && job.State != JobState.Error && job.State != JobState.Canceled)
             {
                 await Task.Delay(TimeSpan.FromSeconds(30));
@@ -169,15 +172,15 @@ namespace Assingment_BeeLingua.API.Functions.MediaService
         {
             string inputValue = activityContext.GetInput<string>();
             var data = JsonConvert.DeserializeObject<ConfigAssetDTO>(inputValue);
-            var assetAMS = await _mediaService.GetAssetAMS(data.AssetID);
+            var assetAMS = await _amsService.GetAssetAMS(data.AssetID);
 
             var ams = await GetAmsCredential(log);
             IAzureMediaServicesClient client = ams.Client;
             
             var listUrl = new List<string>();
-            StreamingLocator locator = await _mediaService.CreateStreamingLocatorAsync(client, ams.ResourceGroup, ams.AccountName, data.OutputName, data.LocatorName);
+            StreamingLocator locator = await _amsService.CreateStreamingLocatorAsync(client, ams.ResourceGroup, ams.AccountName, data.OutputName, data.LocatorName);
 
-            IList<string> urls = await _mediaService.GetStreamingUrlsAsync(client, ams.ResourceGroup, ams.AccountName, locator.Name);
+            IList<string> urls = await _amsService.GetStreamingUrlsAsync(client, ams.ResourceGroup, ams.AccountName, locator.Name);
             foreach (var url in urls)
             {
                 listUrl.Add(url);
@@ -185,7 +188,7 @@ namespace Assingment_BeeLingua.API.Functions.MediaService
 
             string listStreamingURL = string.Join(",", listUrl.ToArray());
             assetAMS.StreamingUrl = listStreamingURL;
-            await _mediaService.UpdateAssetAMS(data.AssetID, assetAMS);
+            await _amsService.UpdateAssetAMS(data.AssetID, assetAMS);
             return listStreamingURL;
 
         }
@@ -199,7 +202,7 @@ namespace Assingment_BeeLingua.API.Functions.MediaService
         {
             string inputValue = activityContext.GetInput<string>();
             var data = JsonConvert.DeserializeObject<ConfigAssetDTO>(inputValue);
-            var assetAMS = await _mediaService.GetAssetAMS(data.AssetID);
+            var assetAMS = await _amsService.GetAssetAMS(data.AssetID);
 
             var ams = await GetAmsCredential(log);
             
@@ -250,7 +253,7 @@ namespace Assingment_BeeLingua.API.Functions.MediaService
 
             
             assetAMS.Status = "encode finished";
-            await _mediaService.UpdateAssetAMS(assetAMS.Id, assetAMS);
+            await _amsService.UpdateAssetAMS(assetAMS.Id, assetAMS);
 
             return manifest;
         }
@@ -258,10 +261,14 @@ namespace Assingment_BeeLingua.API.Functions.MediaService
         #endregion
 
         #region Function
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(MetadataOutputDTO))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(string))]
+        [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(string))]
         [FunctionName("GetUploadURL")]
         public async Task<IActionResult> GetUploadURL(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "POST", Route = "MediaService/GetUploadURL")] HttpRequest req,
-            ILogger log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "POST", Route = "MediaService/GetUploadURL")]
+            [RequestBodyType(typeof(MetadataInputDTO), "Get Upload URL")]  HttpRequest req,
+            [SwaggerIgnore] ILogger log)
         {
             try
             {
@@ -283,10 +290,10 @@ namespace Assingment_BeeLingua.API.Functions.MediaService
                     asset.CreatedBy = input.Author;
                     asset.ContentAddress = asset.Id;
 
-                    asset.UploadUrl = result.UploadUrl = (await _mediaService.InitVideoContainer(credential,
+                    asset.UploadUrl = result.UploadUrl = (await _amsService.InitVideoContainer(credential,
                         asset.ContentAddress, asset.Filename)).ToString();
 
-                    await _mediaService.CreateAssetAMS(asset);
+                    await _amsService.CreateAssetAMS(asset);
 
                     result.ResourceId = asset.Id;
                     result.ContentAddress = asset.ContentAddress;
@@ -321,7 +328,7 @@ namespace Assingment_BeeLingua.API.Functions.MediaService
             {
                 if (fileExists)
                 {
-                    await _mediaService.UploadFile(reqUploadURL, fileLocation);
+                    await _amsService.UploadFile(reqUploadURL, fileLocation);
                 }
 
                 return new OkObjectResult("");
@@ -344,7 +351,7 @@ namespace Assingment_BeeLingua.API.Functions.MediaService
         #region Method
         public async Task<Credential> GetAmsCredential(ILogger log)
         {
-            return await _mediaService.GetCredentialAsync(JsonConvert
+            return await _amsService.GetCredentialAsync(JsonConvert
                         .DeserializeObject<Credential>(envAmsCredential));
         }
 

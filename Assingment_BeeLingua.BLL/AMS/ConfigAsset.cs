@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Assingment_BeeLingua.BLL.MediaService
+namespace Assingment_BeeLingua.BLL.AMS
 {
     public class ConfigAsset
     {

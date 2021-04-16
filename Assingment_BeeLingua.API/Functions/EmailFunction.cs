@@ -1,7 +1,10 @@
 using System;
 using System.IO;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Assingment_BeeLingua.DAL.Models;
+using AzureFunctions.Extensions.Swashbuckle.Attribute;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -15,11 +18,16 @@ namespace Assingment_BeeLingua.API.Functions
     public static class EmailFunction
     {
         private const string attachFile = @"Nature.mp4";
+
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(string))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(string))]
+        [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(string))]
         [FunctionName("SendEmailFunction")]
         public static async Task<IActionResult> SendEmailFunction(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]
+            [RequestBodyType(typeof(OutgoingEmail), "UpdateLesson request")] HttpRequest req,
             [SendGrid(ApiKey = "SendGridAPIKey")] IAsyncCollector<SendGridMessage> messageCollector,
-            ILogger log)
+            [SwaggerIgnore]  ILogger log)
         {
             //string reqBody = await new StreamReader(req.Body).ReadToEndAsync();
            
@@ -47,32 +55,8 @@ namespace Assingment_BeeLingua.API.Functions
                 message.AddAttachment(files.FileName, Convert.ToBase64String(fileBytes));
                 await messageCollector.AddAsync(message);
             }
-            
-            
-
             return new OkObjectResult("Email Sent");
 
-        }
-
-        public class OutgoingEmail
-        {
-            [JsonProperty("to")]
-            public string To { get; set; }
-
-            [JsonProperty("from")]
-            public string From { get; set; }
-
-            [JsonProperty("subject")]
-            public string Subject { get; set; }
-
-            [JsonProperty("body")]
-            public string Body { get; set; }
-
-            [JsonProperty("attachment")]
-            public byte[] Attachment { get; set; }
-
-            [JsonProperty("attachmentName")]
-            public string AttachmentName { get; set; }
         }
     }
 }
