@@ -7,6 +7,7 @@ namespace Assingment_BeeLingua.API
 {
     class StartupSwagger : IWebJobsStartup
     {
+        //Test
         public void Configure(IWebJobsBuilder builder)
         {
             builder.AddSwashBuckle(Assembly.GetExecutingAssembly());
