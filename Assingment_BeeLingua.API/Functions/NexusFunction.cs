@@ -22,7 +22,6 @@ namespace Assingment_BeeLingua.API.Functions
 {
     public class NexusFunction
     {
-        //Test
         private readonly IMapper _mapper;
         private readonly LessonService _lessonService;
         public NexusFunction(CosmosClient client)
